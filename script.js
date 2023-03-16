@@ -12,6 +12,7 @@ let firstCalculation = true;
 let disableEqualBtn = false;
 let disableNumbers = false;
 let disableOperators = true;
+let disableDotBtn = false;
 
 // Add event listeners for buttons
 numberButtons.forEach((button) =>
@@ -25,7 +26,7 @@ operatorButtons.forEach((button) =>
 // Set the number and operator
 function setNumber(number) {
   if (
-    calculationDisplay.textContent.toString().length > 16 ||
+    calculationDisplay.textContent.toString().length > 13 ||
     resultDisplay.textContent.toString().length > 13
   )
     return;
@@ -38,7 +39,7 @@ function setNumber(number) {
 
 function setOperator(operator) {
   if (
-    calculationDisplay.textContent.toString().length > 16 ||
+    calculationDisplay.textContent.toString().length > 13 ||
     resultDisplay.textContent.toString().length > 13
   )
     return;
@@ -48,13 +49,14 @@ function setOperator(operator) {
   disableEqualBtn = false;
   disableNumbers = false;
   disableOperators = true;
+  disableDotBtn = false;
 }
 
 // Equal button executes evaluation
 equalBtn.addEventListener("click", () => calculate());
 function calculate() {
   if (
-    calculationDisplay.textContent.toString().length > 17 ||
+    calculationDisplay.textContent.toString().length > 14 ||
     resultDisplay.textContent.toString().length > 14
   )
     return;
@@ -81,6 +83,7 @@ function reset() {
   calculationDisplay.textContent = "0";
   firstCalculation = true;
   disableNumbers = false;
+  disableDotBtn = false;
 }
 
 // +/- button
@@ -96,5 +99,14 @@ function negate() {
 percentBtn.addEventListener("click", () => percentage());
 function percentage() {
   result = eval(resultDisplay.textContent / 100);
-  resultDisplay.textContent = parseFloat(result.toFixed(10));
+  resultDisplay.textContent = parseFloat(result.toFixed(12));
+}
+
+// dot button
+dotButton.addEventListener("click", () => insertDot());
+function insertDot() {
+  if (calculationDisplay.textContent.slice(-1) == "." || disableDotBtn == true)
+    return;
+  setNumber(dotButton.value);
+  disableDotBtn = true;
 }
