@@ -16,13 +16,13 @@ let disableDotBtn = false;
 
 // disable default key presses (space bar and enter)
 document.addEventListener("keydown", (e) => {
-  if (e.code == "Space" || e.code == "Enter") e.preventDefault();
+  if (e.code == "Space" || e.code == "Enter" || e.code == "Digit7" || e.code == "NumpadDivide") e.preventDefault();
 });
 document.addEventListener("keyup", (e) => {
-  if (e.code == "Space" || e.code == "Enter") e.preventDefault();
+  if (e.code == "Space" || e.code == "Enter" || e.code == "Digit7" || e.code == "NumpadDivide") e.preventDefault();
 });
 document.addEventListener("keypress", (e) => {
-  if (e.code == "Space" || e.code == "Enter") e.preventDefault();
+  if (e.code == "Space" || e.code == "Enter" || e.code == "Digit7" || e.code == "NumpadDivide") e.preventDefault();
 });
 
 // Add event listeners for keyboard inputs
