@@ -34,6 +34,7 @@ document.addEventListener("keydown", (e) => {
   } else if (e.key == "/") {
     setOperator("÷");
   } else if (
+    e.key == "0" ||
     e.key == "1" ||
     e.key == "2" ||
     e.key == "3" ||
