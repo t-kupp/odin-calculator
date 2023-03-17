@@ -53,6 +53,8 @@ document.addEventListener("keydown", (e) => {
     backSpace();
   } else if (e.key == "," || e.key == ".") {
     insertDot();
+  } else if (e.key == "%") {
+    percentage()
   }
 });
 
