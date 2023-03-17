@@ -54,7 +54,7 @@ document.addEventListener("keydown", (e) => {
   } else if (e.key == "," || e.key == ".") {
     insertDot();
   } else if (e.key == "%") {
-    percentage()
+    percentage();
   }
 });
 
@@ -125,7 +125,12 @@ function reset() {
 // CE button removes latest character
 ceBtn.addEventListener("click", () => backSpace());
 function backSpace() {
-  if (!calculationDisplay.textContent.substring(calculationDisplay.textContent.length-1).includes(".")) disableDotBtn = false
+  if (
+    !calculationDisplay.textContent
+      .substring(calculationDisplay.textContent.length - 1)
+      .includes(".")
+  )
+    disableDotBtn = false;
   calculationDisplay.textContent = calculationDisplay.textContent.slice(0, -1);
   disableOperators = false;
   disableEqualBtn = false;
@@ -147,26 +152,16 @@ function insertDot() {
   disableDotBtn = true;
 }
 
+//prettier-ignore
 // Convert tokens to mathematical equivalents
 function convertTokens() {
-  calculationDisplay.textContent = calculationDisplay.textContent.replace(
-    "x",
-    "*"
-  );
-  calculationDisplay.textContent = calculationDisplay.textContent.replace(
-    "÷",
-    "/"
-  );
+  calculationDisplay.textContent = calculationDisplay.textContent.replace("x", "*");
+  calculationDisplay.textContent = calculationDisplay.textContent.replace("÷", "/");
 }
 
+//prettier-ignore
 // Convert back
 function convertBack() {
-  calculationDisplay.textContent = calculationDisplay.textContent.replace(
-    "*",
-    "x"
-  );
-  calculationDisplay.textContent = calculationDisplay.textContent.replace(
-    "/",
-    "÷"
-  );
+  calculationDisplay.textContent = calculationDisplay.textContent.replace("*", "x");
+  calculationDisplay.textContent = calculationDisplay.textContent.replace("/", "÷");
 }
