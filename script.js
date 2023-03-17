@@ -1,7 +1,7 @@
 const resultDisplay = document.getElementById("result-display");
 const calculationDisplay = document.getElementById("calculation-display");
 const cBtn = document.getElementById("c-btn");
-const negativeBtn = document.getElementById("negative-btn");
+const ceBtn = document.getElementById("ce-btn");
 const percentBtn = document.getElementById("percent-btn");
 const equalBtn = document.getElementById("equal-btn");
 const dotButton = document.getElementById("dot-btn");
@@ -16,14 +16,13 @@ let disableDotBtn = false;
 
 // Add event listeners for keyboard inputs
 document.addEventListener("keydown", (e) => {
-  if (e.key == "*" || e.key == "/" || e.key == "+" || e.key == "-") {
-    setOperator(e.key);
-  } else if (e.key >= 0) {
-    setNumber(e.key);
-  } else if (e.key == "Enter") {
-    calculate();
-  }
-});
+  if (e.key == "*" || e.key == "/" || e.key == "+" || e.key == "-") setOperator(e.key);
+  if (e.key >= 0) setNumber(e.key);
+  if (e.key == "Enter") calculate();
+  if (e.key == "c" || e.key == "Escape") reset();
+  if (e.key == "Backspace") backSpace();
+  if (e.key == "," || e.key == ".") insertDot()
+})
 
 // Add event listeners for buttons
 numberButtons.forEach((button) =>
@@ -36,6 +35,7 @@ operatorButtons.forEach((button) =>
 
 // Set the number and operator
 function setNumber(number) {
+  if (calculationDisplay.textContent.length >= 18) return;
   if (disableNumbers == true) return;
   if (calculationDisplay.textContent == 0) calculationDisplay.textContent = "";
   calculationDisplay.textContent += number;
@@ -44,6 +44,7 @@ function setNumber(number) {
 }
 
 function setOperator(operator) {
+  if (calculationDisplay.textContent.length >= 18) return;
   if (calculationDisplay.textContent == 0 || disableOperators == true) return;
   if (firstCalculation == false)
     calculationDisplay.textContent = resultDisplay.textContent;
@@ -60,12 +61,12 @@ function calculate() {
   if (disableEqualBtn == true) return;
   if (firstCalculation == false) {
     result = eval(calculationDisplay.textContent);
-    resultDisplay.textContent = parseFloat(result.toFixed(12));
+    resultDisplay.textContent = parseFloat(result.toFixed(10));
     disableNumbers = true;
     return;
   }
   result = eval(calculationDisplay.textContent);
-  resultDisplay.textContent = parseFloat(result.toFixed(12));
+  resultDisplay.textContent = parseFloat(result.toFixed(10));
   firstCalculation = false;
   disableEqualBtn = true;
   disableNumbers = true;
@@ -81,20 +82,20 @@ function reset() {
   disableDotBtn = false;
 }
 
-// +/- button
-negativeBtn.addEventListener("click", () => negate());
-function negate() {
-  if (resultDisplay.textContent == "") return;
-  resultDisplay.textContent = eval(
-    resultDisplay.textContent - resultDisplay.textContent * 2
-  );
+// CE button removes latest character
+ceBtn.addEventListener("click", () => backSpace());
+function backSpace() {
+  calculationDisplay.textContent = calculationDisplay.textContent.slice(0, -1)
+  disableOperators = false;
+  disableEqualBtn = false;
+  disableNumbers = false;
 }
 
 // % button
 percentBtn.addEventListener("click", () => percentage());
 function percentage() {
   result = eval(resultDisplay.textContent / 100);
-  resultDisplay.textContent = parseFloat(result.toFixed(12));
+  if (result.length > 15) resultDisplay.textContent = parseFloat(result.toFixed(18));
 }
 
 // dot button
@@ -105,3 +106,4 @@ function insertDot() {
   setNumber(dotButton.value);
   disableDotBtn = true;
 }
+
