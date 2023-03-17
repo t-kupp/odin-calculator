@@ -14,6 +14,17 @@ let disableNumbers = false;
 let disableOperators = true;
 let disableDotBtn = false;
 
+// Add event listeners for keyboard inputs
+document.addEventListener("keydown", (e) => {
+  if (e.key == "*" || e.key == "/" || e.key == "+" || e.key == "-") {
+    setOperator(e.key);
+  } else if (e.key >= 0) {
+    setNumber(e.key);
+  } else if (e.key == "Enter") {
+    calculate();
+  }
+});
+
 // Add event listeners for buttons
 numberButtons.forEach((button) =>
   button.addEventListener("click", () => setNumber(button.value))
@@ -25,11 +36,6 @@ operatorButtons.forEach((button) =>
 
 // Set the number and operator
 function setNumber(number) {
-  if (
-    calculationDisplay.textContent.toString().length > 13 ||
-    resultDisplay.textContent.toString().length > 13
-  )
-    return;
   if (disableNumbers == true) return;
   if (calculationDisplay.textContent == 0) calculationDisplay.textContent = "";
   calculationDisplay.textContent += number;
@@ -38,13 +44,9 @@ function setNumber(number) {
 }
 
 function setOperator(operator) {
-  if (
-    calculationDisplay.textContent.toString().length > 13 ||
-    resultDisplay.textContent.toString().length > 13
-  )
-    return;
   if (calculationDisplay.textContent == 0 || disableOperators == true) return;
-  if (firstCalculation == false) calculationDisplay.textContent = "";
+  if (firstCalculation == false)
+    calculationDisplay.textContent = resultDisplay.textContent;
   calculationDisplay.textContent += operator;
   disableEqualBtn = false;
   disableNumbers = false;
@@ -55,16 +57,9 @@ function setOperator(operator) {
 // Equal button executes evaluation
 equalBtn.addEventListener("click", () => calculate());
 function calculate() {
-  if (
-    calculationDisplay.textContent.toString().length > 14 ||
-    resultDisplay.textContent.toString().length > 14
-  )
-    return;
   if (disableEqualBtn == true) return;
   if (firstCalculation == false) {
-    result = eval(
-      (resultDisplay.textContent += calculationDisplay.textContent)
-    );
+    result = eval(calculationDisplay.textContent);
     resultDisplay.textContent = parseFloat(result.toFixed(12));
     disableNumbers = true;
     return;
