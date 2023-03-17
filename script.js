@@ -83,7 +83,7 @@ function setOperator(operator) {
   if (firstCalculation == false)
     calculationDisplay.textContent = resultDisplay.textContent;
   calculationDisplay.textContent += operator;
-  disableEqualBtn = false;
+  disableEqualBtn = true;
   disableNumbers = false;
   disableOperators = true;
   disableDotBtn = false;
