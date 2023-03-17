@@ -14,15 +14,47 @@ let disableNumbers = false;
 let disableOperators = true;
 let disableDotBtn = false;
 
+// disable default key presses (space bar and enter)
+document.addEventListener("keydown", (e) => {
+  if (e.code == "Space" || e.code == "Enter") e.preventDefault();
+});
+document.addEventListener("keyup", (e) => {
+  if (e.code == "Space" || e.code == "Enter") e.preventDefault();
+});
+document.addEventListener("keypress", (e) => {
+  if (e.code == "Space" || e.code == "Enter") e.preventDefault();
+});
+
 // Add event listeners for keyboard inputs
 document.addEventListener("keydown", (e) => {
-  if (e.key == "*" || e.key == "/" || e.key == "+" || e.key == "-") setOperator(e.key);
-  if (e.key >= 0) setNumber(e.key);
-  if (e.key == "Enter") calculate();
-  if (e.key == "c" || e.key == "Escape") reset();
-  if (e.key == "Backspace") backSpace();
-  if (e.key == "," || e.key == ".") insertDot()
-})
+  if (e.key == "+" || e.key == "-") {
+    setOperator(e.key);
+  } else if (e.key == "*") {
+    setOperator("x");
+  } else if (e.key == "/") {
+    setOperator("÷");
+  } else if (
+    e.key == "1" ||
+    e.key == "2" ||
+    e.key == "3" ||
+    e.key == "4" ||
+    e.key == "5" ||
+    e.key == "6" ||
+    e.key == "7" ||
+    e.key == "8" ||
+    e.key == "9"
+  ) {
+    setNumber(e.key);
+  } else if (e.key == "Enter") {
+    calculate();
+  } else if (e.key == "c" || e.key == "Escape") {
+    reset();
+  } else if (e.key == "Backspace") {
+    backSpace();
+  } else if (e.key == "," || e.key == ".") {
+    insertDot();
+  }
+});
 
 // Add event listeners for buttons
 numberButtons.forEach((button) =>
@@ -58,18 +90,24 @@ function setOperator(operator) {
 // Equal button executes evaluation
 equalBtn.addEventListener("click", () => calculate());
 function calculate() {
-  if (disableEqualBtn == true) return;
+  convertTokens();
+  if (disableEqualBtn == true) {
+    convertBack();
+    return;
+  }
   if (firstCalculation == false) {
     result = eval(calculationDisplay.textContent);
     resultDisplay.textContent = parseFloat(result.toFixed(10));
+    convertBack();
     disableNumbers = true;
-    return;
+  } else {
+    result = eval(calculationDisplay.textContent);
+    resultDisplay.textContent = parseFloat(result.toFixed(10));
+    convertBack();
+    firstCalculation = false;
+    disableEqualBtn = true;
+    disableNumbers = true;
   }
-  result = eval(calculationDisplay.textContent);
-  resultDisplay.textContent = parseFloat(result.toFixed(10));
-  firstCalculation = false;
-  disableEqualBtn = true;
-  disableNumbers = true;
 }
 
 // C button resets the displays
@@ -85,7 +123,8 @@ function reset() {
 // CE button removes latest character
 ceBtn.addEventListener("click", () => backSpace());
 function backSpace() {
-  calculationDisplay.textContent = calculationDisplay.textContent.slice(0, -1)
+  if (!calculationDisplay.textContent.substring(calculationDisplay.textContent.length-1).includes(".")) disableDotBtn = false
+  calculationDisplay.textContent = calculationDisplay.textContent.slice(0, -1);
   disableOperators = false;
   disableEqualBtn = false;
   disableNumbers = false;
@@ -95,9 +134,8 @@ function backSpace() {
 percentBtn.addEventListener("click", () => percentage());
 function percentage() {
   result = eval(resultDisplay.textContent / 100);
-  if (result.length > 15) resultDisplay.textContent = parseFloat(result.toFixed(18));
+  resultDisplay.textContent = parseFloat(result.toFixed(15));
 }
-
 // dot button
 dotButton.addEventListener("click", () => insertDot());
 function insertDot() {
@@ -107,3 +145,26 @@ function insertDot() {
   disableDotBtn = true;
 }
 
+// Convert tokens to mathematical equivalents
+function convertTokens() {
+  calculationDisplay.textContent = calculationDisplay.textContent.replace(
+    "x",
+    "*"
+  );
+  calculationDisplay.textContent = calculationDisplay.textContent.replace(
+    "÷",
+    "/"
+  );
+}
+
+// Convert back
+function convertBack() {
+  calculationDisplay.textContent = calculationDisplay.textContent.replace(
+    "*",
+    "x"
+  );
+  calculationDisplay.textContent = calculationDisplay.textContent.replace(
+    "/",
+    "÷"
+  );
+}
